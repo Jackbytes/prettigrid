@@ -1,20 +1,20 @@
 from PIL import Image, ImageDraw, ImageColor, ImageFont
 import glob
 
-class pretti(self):
 
+class pretti(self):
     def __init__(self):
 
         pass
-    
-    def update(config,self):
+
+    def update(self, config):
 
         pass
 
-    def new_rulebook(self,rulebook):
+    def new_rulebook(self, rulebook):
 
         if callable(rulebook):
-            
+
             pass
 
         elif type(rulebook) == dict:
