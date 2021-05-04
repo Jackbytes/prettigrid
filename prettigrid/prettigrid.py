@@ -76,8 +76,6 @@ class pretti:
 
                     block_draw(self.image, column, row, self.height_size, self.width_size, fill_colour)
 
-
-
     def display(self):
 
         self.image.show()
@@ -87,17 +85,13 @@ if __name__ == "__main__":
     import numpy as np
     import inspect
 
-    def color(value: float,column,row):
+    def color(value: float,column: int,row: int) -> str:
 
-        rgb_string = f"hsl({value * 360},100%,50%)"
+        rgb_string = f"hsl({360*value},100%,50%)"
 
         return rgb_string
 
-    ar = np.random.rand(10, 10)
-    pret = pretti(ar, color)
+    random_array = np.random.rand(5,5)
+    pret = pretti(random_array,color)
     pret.draw()
     pret.display()
-
-    # pret = pretti([[1, 0, 1], [0, 0, 0], [0, 0, 0], [1, 0, 1]], {0: "white", 1: "red"})
-    # pret.draw()
-    # pret.display()
