@@ -107,22 +107,91 @@ class pretti:
 
         self.image.save("{}".format(path))
 
+
+def rule_num_to_dictionary(number):
+
+    return_dict = {}
+
+    keys = ["111", "110", "101", "100", "011", "010", "001", "000"]
+
+    raw_bin = bin(number)[2:].zfill(8)
+
+    for i in range(8):
+
+        return_dict[keys[i]] = raw_bin[i]
+
+    print(return_dict)
+
+    return return_dict
+
+
+def next_row(row, rule_dict):
+
+    return_row = row
+
+    for i in range(0, len(row)):
+
+        if i == 0:
+
+            key = f"0{int(row[i])!r}{int(row[i+1])!r}"
+
+        elif i == (len(row) - 1):
+
+            key = f"{int(row[-2])!r}{int(row[-1])!r}0"
+
+        else:
+
+            key = f"{int(row[i-1])!r}{int(row[i])!r}{int(row[i+1])!r}"
+
+        return_row[i] = int(rule_dict[key])
+
+    return return_row
+
+
+def wolfram_rule_array(rule_num: int, rows: int, start_row: list):
+
+    return_array = np.zeros((rows, len(start_row)))
+
+    rule_dict = rule_num_to_dictionary(rule_num)
+
+    return_array[0] = start_row
+
+    for i in range(1, rows):
+
+        return_array[i] = next_row(return_array[i - 1], rule_dict)
+
+    return return_array
+
+
 if __name__ == "__main__":
 
     import numpy as np
     import inspect
 
-    def color(**kwargs) -> str:
+    # def color(**kwargs) -> str:
 
-        row_ratio = kwargs['row']/kwargs['max_row']
+    #     row_ratio = kwargs['row']/kwargs['max_row']
 
-        column_ratio = kwargs['column']/kwargs['max_column']
+    #     column_ratio = kwargs['column']/kwargs['max_column']
 
-        rgb_string = f"hsl({360*kwargs['value']},100%,{50*column_ratio*row_ratio}%)"
+    #     rgb_string = f"hsl({360*kwargs['value']},100%,{50*column_ratio*row_ratio}%)"
 
-        return rgb_string
+    #     return rgb_string
 
-    random_array = np.random.rand(100, 100)
-    pret = pretti(random_array, color)
+    # random_array = np.random.rand(100, 100)
+    # pret = pretti(random_array, color)
+    # pret.draw()
+    # pret.display()
+
+    start_row = np.random.choice(2, 200)
+
+    #start_row = np.zeros((100))
+
+    start_row[49] = 1
+
+    tmp_array = wolfram_rule_array(137, 200, start_row)
+
+    pret = pretti(tmp_array, {0: "white", 1: "pink"})
+    pret.site_size = 5
     pret.draw()
     pret.display()
