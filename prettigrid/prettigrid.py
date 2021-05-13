@@ -1,17 +1,20 @@
 from PIL import Image, ImageDraw, ImageColor, ImageFont
 import glob
 
-def block_draw(image,column,row,height,width,fill_colour):
 
-    #numpy array [row,column]
-    #pil image [column,row]
+def block_draw(image, column, row, height, width, fill_colour):
 
-    pixel_x = column*width
-    pixel_y = row*height
+    # numpy array [row,column]
+    # pil image [column,row]
+
+    pixel_x = column * width
+    pixel_y = row * height
 
     draw = ImageDraw.Draw(image)
 
-    draw.rectangle((pixel_x,pixel_y,pixel_x+width,pixel_y+height), fill=fill_colour)
+    draw.rectangle(
+        (pixel_x, pixel_y, pixel_x + width, pixel_y + height), fill=fill_colour
+    )
 
     del draw
 
@@ -66,32 +69,57 @@ class pretti:
 
                 if self.__rulebook_is_function:
 
-                    fill_colour = self.rulebook(value=self.config[row][column], row=row,column=column)
+                    fill_colour = self.rulebook(
+                        value=self.config[row][column],
+                        row=row,
+                        column=column,
+                        max_column=self.num_columns,
+                        max_row=self.num_rows,
+                    )
 
-                    block_draw(self.image, column, row, self.height_size, self.width_size, fill_colour)
+                    block_draw(
+                        self.image,
+                        column,
+                        row,
+                        self.height_size,
+                        self.width_size,
+                        fill_colour,
+                    )
 
                 else:
 
                     fill_colour = self.rulebook[self.config[row][column]]
 
-                    block_draw(self.image, column, row, self.height_size, self.width_size, fill_colour)
+                    block_draw(
+                        self.image,
+                        column,
+                        row,
+                        self.height_size,
+                        self.width_size,
+                        fill_colour,
+                    )
 
     def display(self):
 
         self.image.show()
+
 
 if __name__ == "__main__":
 
     import numpy as np
     import inspect
 
-    def color(value: float,column: int,row: int) -> str:
+    def color(**kwargs) -> str:
 
-        rgb_string = f"hsl({360*value},100%,50%)"
+        row_ratio = kwargs['row']/kwargs['max_row']
+
+        column_ratio = kwargs['column']/kwargs['max_column']
+
+        rgb_string = f"hsl({360*kwargs['value']},100%,{50*column_ratio*row_ratio}%)"
 
         return rgb_string
 
-    random_array = np.random.rand(5,5)
-    pret = pretti(random_array,color)
+    random_array = np.random.rand(20, 20)
+    pret = pretti(random_array, color)
     pret.draw()
     pret.display()
