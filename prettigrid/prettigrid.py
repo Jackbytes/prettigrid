@@ -103,6 +103,9 @@ class pretti:
 
         self.image.show()
 
+    def save(self):
+
+        self.image.save("{}".format(path))
 
 if __name__ == "__main__":
 
@@ -119,7 +122,7 @@ if __name__ == "__main__":
 
         return rgb_string
 
-    random_array = np.random.rand(20, 20)
+    random_array = np.random.rand(100, 100)
     pret = pretti(random_array, color)
     pret.draw()
     pret.display()
